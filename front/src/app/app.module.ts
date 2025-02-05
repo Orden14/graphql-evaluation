@@ -8,8 +8,9 @@ import { RegisterPageComponent } from './components/register-page/register-page.
 import { HeadersComponent } from './components/headers/headers.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginPageComponent } from './components/login-page/login-page.component';
-import { GraphQLModule } from './graphql.module';
+import { GraphQLModule } from '../graphql/graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { DetailPostComponent } from './components/detail-post/detail-post.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
     HomePageComponent,
     RegisterPageComponent,
     HeadersComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    DetailPostComponent
   ],
   imports: [
     BrowserModule,

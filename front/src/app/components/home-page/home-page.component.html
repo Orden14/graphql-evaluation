@@ -19,7 +19,26 @@
     </wcs-tooltip>
   </div>
 
-  <wcs-card class="post-card" mode="raised">
-    <wcs-card-body> Basic card </wcs-card-body>
-  </wcs-card>
+  <div *ngFor="let article of articles">
+    <wcs-card (click)="viewDetails(article!.id)" class="post-card" mode="raised">
+      <wcs-card-body>
+        <h2>{{ article?.title }}</h2>
+        <p>{{ article?.content }}</p>
+        <p><strong>Auteur :</strong> {{ article?.author!.username }}</p>
+        <p><strong>Likes :</strong> {{ article?.likes?.length || 0 }}</p>        
+        <div *ngIf="article!.comments! != null">
+          <h3>Commentaires :</h3>
+          <ul>
+            <li *ngFor="let comment of article?.comments">
+              <strong>{{ comment?.author?.username }} :</strong> {{ comment?.content }}
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="article?.comments! == null">
+          <p>Aucun commentaire pour le moment.</p>
+        </div>
+      </wcs-card-body>
+    </wcs-card>
+  </div>
+  
 </div>

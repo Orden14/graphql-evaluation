@@ -1,0 +1,49 @@
+query GetArticles {
+  getArticles {
+    id
+    title
+    content
+    author {
+      id
+      username
+    }
+    comments {
+      id
+      content
+      author {
+        username
+      }
+    }
+    likes {
+      id
+      user {
+        username
+      }
+    }
+  }
+}
+
+query GetArticle($id: ID!) {
+  getArticle(id: $id) {
+    id
+    title
+    content
+    author {
+      id
+      username
+    }
+    comments {
+      id
+      content
+      author {
+        username
+      }
+    }
+    likes {
+      id
+      user {
+        username
+      }
+    }
+  }
+}

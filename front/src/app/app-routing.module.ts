@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { RegisterPageComponent } from './components/register-page/register-page.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { DetailPostComponent } from './components/detail-post/detail-post.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path : 'login',
     component : LoginPageComponent,
+  },
+  {
+    path : 'post/:id',
+    component : DetailPostComponent,
   },
   {
     path: '**',
