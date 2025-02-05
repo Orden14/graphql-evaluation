@@ -19,4 +19,4 @@ Lancer le serveur
 npm run start
 ```
 
-Le serveur Apollo est accessible via `localhost:4000`
+L'interface Apollo est accessible via `localhost:4000`
