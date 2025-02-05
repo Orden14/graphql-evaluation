@@ -1,6 +1,6 @@
 import {User} from "../config/types.js";
 
-export const getUserCreationSuccessResponse = (createdUser : User) => {
+export const getUserCreationSuccessResponse = (createdUser: User) => {
     return {
         code: 200,
         message: `User ${createdUser.username} has been created`,

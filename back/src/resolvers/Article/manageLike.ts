@@ -6,7 +6,7 @@ import {
 } from "../../response/LikeResponse.js";
 import {getUserNotAuthenticatedResponse} from "../../response/AuthenticationResponse.js";
 
-export const likeArticle: MutationResolvers['likeArticle'] = async (_, { id }, { dataSources, user }) => {
+export const likeArticle: MutationResolvers['likeArticle'] = async (_, {id}, {dataSources, user}) => {
     if (!user) {
         return getUserNotAuthenticatedResponse();
     }
@@ -44,7 +44,7 @@ export const likeArticle: MutationResolvers['likeArticle'] = async (_, { id }, {
     }
 };
 
-export const removeLike: MutationResolvers['removeLike'] = async (_, { id }, { dataSources, user }) => {
+export const removeLike: MutationResolvers['removeLike'] = async (_, {id}, {dataSources, user}) => {
     if (!user) {
         return getUserNotAuthenticatedResponse();
     }

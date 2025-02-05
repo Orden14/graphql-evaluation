@@ -2,7 +2,10 @@ import {MutationResolvers} from "../../config/types.js";
 import {getUserNotAuthenticatedResponse} from "../../response/AuthenticationResponse.js";
 import {getCommentCreationFailureResponse, getCommentCreationSuccessResponse} from "../../response/CommentResponse.js";
 
-export const commentArticle: MutationResolvers['commentArticle'] = async (_, { articleId, content }, { dataSources, user }) => {
+export const commentArticle: MutationResolvers['commentArticle'] = async (_, {articleId, content}, {
+    dataSources,
+    user
+}) => {
     if (!user) {
         return getUserNotAuthenticatedResponse()
     }

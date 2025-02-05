@@ -1,6 +1,6 @@
 import {QueryResolvers} from "../../config/types.js";
 
-export const getArticle: QueryResolvers['getArticle'] = async (_, { id }, context) => {
+export const getArticle: QueryResolvers['getArticle'] = async (_, {id}, context) => {
     return context.dataSources.db.article.findUnique({
         where: {id},
         include: {
