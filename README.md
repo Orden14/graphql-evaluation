@@ -6,9 +6,9 @@ M1 Dev
 PAR-002  
 
 ## Groupe
-Thomas L.
-David W.
-Antoine H.
+Thomas L. (20230012)  
+David W.  (20230637)  
+Antoine H. (20230367)
 
 ## README
 [Readme du front](./front/README.md)  
