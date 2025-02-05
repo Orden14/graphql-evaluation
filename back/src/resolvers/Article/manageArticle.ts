@@ -1,60 +1,70 @@
 import {MutationResolvers} from "../../config/types.js";
+import {
+    getArticleManagementFailureResponse,
+    getArticleDeletionSuccessResponse,
+    getArticleManagementSuccessResponse
+} from "../../response/ArticleResponse.js";
+import {getUserNotAuthenticatedResponse} from "../../response/AuthenticationResponse.js";
 
-export const createArticle: MutationResolvers['createArticle'] = async (_, { title, content }, { dataSources, user }) => {
+export const createArticle: MutationResolvers['createArticle'] = async (_, {title, content}, {dataSources, user}) => {
     if (!user) {
-        throw new Error('Not authenticated');
+        return getUserNotAuthenticatedResponse();
     }
 
-    const article = await dataSources.db.article.create({
-        data: {
-            title,
-            content,
-            authorId: user.id
-        },
-        include: {
-            author: true
-        }
-    });
+    try {
+        const article = await dataSources.db.article.create({
+            data: {
+                title,
+                content,
+                authorId: user.id
+            },
+            include: {
+                author: true
+            }
+        });
 
-    return {
-        code: 201,
-        success: true,
-        message: 'Article created successfully',
-        article
-    };
+        return getArticleManagementSuccessResponse(article, 'Article created successfully');
+    } catch {
+        return getArticleManagementFailureResponse('Article could not be created');
+    }
 };
 
-export const updateArticle: MutationResolvers['updateArticle'] = async (_, { id, title, content }, { dataSources, user }) => {
+export const updateArticle: MutationResolvers['updateArticle'] = async (_, {id, title, content}, {
+    dataSources,
+    user
+}) => {
     if (!user) {
-        throw new Error('Not authenticated');
+        return getUserNotAuthenticatedResponse();
     }
 
-    const article = await dataSources.db.article.update({
-        where: { id },
-        data: {
-            title: title ?? undefined,
-            content: content ?? undefined },
-        include: { author: true }
-    });
+    try {
+        const article = await dataSources.db.article.update({
+            where: {id},
+            data: {
+                title: title ?? undefined,
+                content: content ?? undefined
+            },
+            include: {author: true}
+        });
 
-    return {
-        code: 200,
-        success: true,
-        message: 'Article updated successfully',
-        article
-    };
+        return getArticleManagementSuccessResponse(article, 'Article updated successfully');
+    } catch {
+        return getArticleManagementFailureResponse('Article could not be updated');
+    }
 };
 
-export const deleteArticle: MutationResolvers['deleteArticle'] = async (_, { id }, { dataSources, user }) => {
+export const deleteArticle: MutationResolvers['deleteArticle'] = async (_, {id}, {dataSources, user}) => {
     if (!user) {
         throw new Error('Not authenticated');
     }
 
-    await dataSources.db.article.delete({ where: { id } });
+    try {
+        await dataSources.db.like.deleteMany({where: {articleId: id}});
+        await dataSources.db.comment.deleteMany({where: {articleId: id}});
+        await dataSources.db.article.delete({where: {id}});
 
-    return {
-        code: 200,
-        success: true,
-        message: 'Article deleted successfully'
-    };
+        return getArticleDeletionSuccessResponse();
+    } catch {
+        return getArticleManagementFailureResponse('Error while deleting the article');
+    }
 };

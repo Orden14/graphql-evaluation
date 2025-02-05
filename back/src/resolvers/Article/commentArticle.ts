@@ -1,30 +1,31 @@
 import {MutationResolvers} from "../../config/types.js";
+import {getUserNotAuthenticatedResponse} from "../../response/AuthenticationResponse.js";
+import {getCommentCreationFailureResponse, getCommentCreationSuccessResponse} from "../../response/CommentResponse.js";
 
 export const commentArticle: MutationResolvers['commentArticle'] = async (_, { articleId, content }, { dataSources, user }) => {
     if (!user) {
-        throw new Error('Not authenticated');
+        return getUserNotAuthenticatedResponse()
     }
 
-    const comment = await dataSources.db.comment.create({
-        data: {
-            content,
-            authorId: user.id,
-            articleId
-        },
-        include: {
-            article: {
-                include: {
-                    author: true
-                }
+    try {
+        const comment = await dataSources.db.comment.create({
+            data: {
+                content,
+                authorId: user.id,
+                articleId
             },
-            author: true
-        }
-    });
+            include: {
+                article: {
+                    include: {
+                        author: true
+                    }
+                },
+                author: true
+            }
+        });
 
-    return {
-        code: 201,
-        success: true,
-        message: 'Comment added successfully',
-        comment
-    };
+        return getCommentCreationSuccessResponse(comment);
+    } catch {
+        return getCommentCreationFailureResponse();
+    }
 };
