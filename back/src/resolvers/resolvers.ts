@@ -4,7 +4,7 @@ import {signIn} from "./User/signIn.js";
 import {getArticle, getArticles} from "./Article/getArticle.js";
 import {createArticle, updateArticle, deleteArticle} from "./Article/manageArticle.js";
 import {commentArticle} from "./Article/commentArticle.js";
-import {likeArticle} from "./Article/likeArticle.js";
+import {likeArticle, removeLike} from "./Article/manageLike.js";
 
 export const resolvers: Resolvers = {
     Query: {
@@ -18,6 +18,7 @@ export const resolvers: Resolvers = {
         updateArticle,
         deleteArticle,
         commentArticle,
-        likeArticle
+        likeArticle,
+        removeLike
     },
 }

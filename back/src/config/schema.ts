@@ -12,8 +12,9 @@ export const typeDefs = gql`
         createArticle(title: String!, content: String!): ArticleResponse
         updateArticle(id: ID!, title: String, content: String): ArticleResponse
         deleteArticle(id: ID!): ArticleResponse
-        likeArticle(id: ID!): LikeResponse
         commentArticle(articleId: ID!, content: String!): CommentResponse
+        likeArticle(id: ID!): LikeResponse
+        removeLike(id: ID!): LikeResponse
     }
 
     type User {
