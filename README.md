@@ -10,6 +10,6 @@ Thomas L. (20230012)
 David W.  (20230637)  
 Antoine H. (20230367)
 
-## README
-[Readme du front](./front/README.md)  
-[Readme du back](./back/README.md)  
+## SETUP
+[README pour lancer le front](./front/README.md)  
+[README pour lancer le back](./back/README.md)  
