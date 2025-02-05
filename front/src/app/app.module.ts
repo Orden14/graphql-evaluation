@@ -1,16 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomePageComponent } from './components/home-page/home-page.component';
+import { WcsAngularModule } from 'wcs-angular';
+import { RegisterPageComponent } from './components/register-page/register-page.component';
+import { HeadersComponent } from './components/headers/headers.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LoginPageComponent } from './components/login-page/login-page.component';
+import { GraphQLModule } from './graphql.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomePageComponent,
+    RegisterPageComponent,
+    HeadersComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    WcsAngularModule,
+    NgbModule,
+    GraphQLModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

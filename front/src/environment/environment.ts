@@ -1,4 +1,5 @@
-export const environment = {
-    apiUrl : 'http://localhost:3000',
+export const Environment = {
+    production : false,
+    apiUrl : 'http://localhost:4000',
     version : 0.1
 }

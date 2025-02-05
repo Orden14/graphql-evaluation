@@ -1,0 +1,17 @@
+.post-container {
+    height: 100%;
+    overflow: hidden;
+    background-color: #f9fafb;
+
+    .add-post {
+        margin: 16px;
+        justify-content: flex-end;
+        display: flex;
+    }
+
+    .post-card {
+        margin: 16px;
+        padding: 16px;
+    }
+
+}
