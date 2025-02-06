@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { GetArticleGQL, GetArticleQuery } from 'src/app/generated/graphql';
+import { CommentArticleGQL, GetArticleGQL, GetArticleQuery } from 'src/app/generated/graphql';
 
 @Component({
   selector: 'app-detail-post',
@@ -9,10 +9,13 @@ import { GetArticleGQL, GetArticleQuery } from 'src/app/generated/graphql';
 })
 export class DetailPostComponent implements OnInit {
   article: GetArticleQuery['getArticle'] | null = null;
+  content: string = '';
+  errorMessage: string = '';
 
   constructor(
     private route: ActivatedRoute,
-    private getArticleGQL: GetArticleGQL
+    private getArticleGQL: GetArticleGQL,
+    private commentArticleGQL : CommentArticleGQL,
   ) {}
 
   ngOnInit(): void {
@@ -23,4 +26,30 @@ export class DetailPostComponent implements OnInit {
       });
     }
   }
+
+  publishComment(id : string) {
+    if (!this.content.trim()) {
+      this.errorMessage = "Veuillez écrire quelque chose";
+      return;
+    }
+    
+    this.commentArticleGQL.mutate({ articleId: id, content: this.content }).subscribe(({ data }) => {
+        if (data?.commentArticle?.success) {
+          console.log('Commentaire ajouté avec succès :', data.commentArticle.comment);
+          this.content = ''; 
+          this.errorMessage = '';
+        } else {
+          this.errorMessage = "Erreur : " + (data?.commentArticle?.message || "Impossible d'ajouter le commentaire");
+        }
+      }, error => {
+        console.error("Erreur GraphQL :", error);
+        this.errorMessage = "Une erreur est survenue, veuillez réessayer.";
+      });
+  }
+
+  updateContent(event: Event): void {
+    const target = event.target as HTMLTextAreaElement;
+    this.content = target.value;
+  }
+
 }

@@ -9,15 +9,17 @@
 <wcs-divider> </wcs-divider>
 
 <div>
+    <h3>Poster un commentaire</h3>
     <wcs-form-field>
-        <wcs-label>Enter your name</wcs-label>
-        <wcs-input placeholder="John Doe"></wcs-input>
-        <wcs-hint>A name is something that describes a person</wcs-hint>
-        <wcs-error>Your name is not valid, please do what is necessary
-            <a href="https://www.service-public.fr/particuliers/vosdroits/F1656">here</a>.
-        </wcs-error>
+        <wcs-textarea (input)="updateContent($event)" placeholder="Commentaire" rows="6" cols="80"></wcs-textarea>
+        <wcs-error>{{ this.errorMessage }}</wcs-error>
     </wcs-form-field>
+    <wcs-button class="wcs-primary" (click)="publishComment(article!.id)">
+        Submit
+    </wcs-button>
 </div>
+
+<wcs-divider> </wcs-divider>
 
 <div *ngIf="article">
   <h3>Commentaires :</h3>

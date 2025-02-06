@@ -1,0 +1,22 @@
+mutation CommentArticle($articleId: ID!, $content: String!) {
+  commentArticle(articleId: $articleId, content: $content) {
+    success
+    message
+    comment {
+      id
+      content
+      author {
+        id
+        username
+      }
+      article {
+        id
+        title
+        author {
+          id
+          username
+        }
+      }
+    }
+  }
+}

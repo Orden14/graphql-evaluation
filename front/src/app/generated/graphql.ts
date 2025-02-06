@@ -81,6 +81,7 @@ export type Mutation = {
   createUser?: Maybe<CreateUserResponse>;
   deleteArticle?: Maybe<ArticleResponse>;
   likeArticle?: Maybe<LikeResponse>;
+  removeLike?: Maybe<LikeResponse>;
   signIn?: Maybe<SignInUserResponse>;
   updateArticle?: Maybe<ArticleResponse>;
 };
@@ -110,6 +111,11 @@ export type MutationDeleteArticleArgs = {
 
 
 export type MutationLikeArticleArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationRemoveLikeArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -162,6 +168,30 @@ export type GetArticleQueryVariables = Exact<{
 
 
 export type GetArticleQuery = { __typename?: 'Query', getArticle?: { __typename?: 'Article', id: string, title: string, content: string, author: { __typename?: 'User', id: string, username: string }, comments?: Array<{ __typename?: 'Comment', id: string, content: string, author: { __typename?: 'User', username: string } } | null> | null, likes?: Array<{ __typename?: 'Like', id: string, user: { __typename?: 'User', username: string } } | null> | null } | null };
+
+export type CommentArticleMutationVariables = Exact<{
+  articleId: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type CommentArticleMutation = { __typename?: 'Mutation', commentArticle?: { __typename?: 'CommentResponse', success: boolean, message: string, comment?: { __typename?: 'Comment', id: string, content: string, author: { __typename?: 'User', id: string, username: string }, article: { __typename?: 'Article', id: string, title: string, author: { __typename?: 'User', id: string, username: string } } } | null } | null };
+
+export type CreateUserMutationVariables = Exact<{
+  username: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'CreateUserResponse', success: boolean, message: string, user?: { __typename?: 'User', id: string, username: string } | null } | null };
+
+export type SignInMutationVariables = Exact<{
+  username: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+
+export type SignInMutation = { __typename?: 'Mutation', signIn?: { __typename?: 'SignInUserResponse', success: boolean, message: string, token?: string | null } | null };
 
 export const GetArticlesDocument = gql`
     query GetArticles {
@@ -232,6 +262,84 @@ export const GetArticleDocument = gql`
   })
   export class GetArticleGQL extends Apollo.Query<GetArticleQuery, GetArticleQueryVariables> {
     override document = GetArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CommentArticleDocument = gql`
+    mutation CommentArticle($articleId: ID!, $content: String!) {
+  commentArticle(articleId: $articleId, content: $content) {
+    success
+    message
+    comment {
+      id
+      content
+      author {
+        id
+        username
+      }
+      article {
+        id
+        title
+        author {
+          id
+          username
+        }
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CommentArticleGQL extends Apollo.Mutation<CommentArticleMutation, CommentArticleMutationVariables> {
+    override document = CommentArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateUserDocument = gql`
+    mutation CreateUser($username: String!, $password: String!) {
+  createUser(username: $username, password: $password) {
+    success
+    message
+    user {
+      id
+      username
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateUserGQL extends Apollo.Mutation<CreateUserMutation, CreateUserMutationVariables> {
+    override document = CreateUserDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const SignInDocument = gql`
+    mutation SignIn($username: String!, $password: String!) {
+  signIn(username: $username, password: $password) {
+    success
+    message
+    token
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SignInGQL extends Apollo.Mutation<SignInMutation, SignInMutationVariables> {
+    override document = SignInDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
