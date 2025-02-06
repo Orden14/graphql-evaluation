@@ -55,7 +55,7 @@ export const updateArticle: MutationResolvers['updateArticle'] = async (_, {id, 
 
 export const deleteArticle: MutationResolvers['deleteArticle'] = async (_, {id}, {dataSources, user}) => {
     if (!user) {
-        throw new Error('Not authenticated');
+        return getUserNotAuthenticatedResponse();
     }
 
     try {
