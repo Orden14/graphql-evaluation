@@ -1,0 +1,28 @@
+mutation LikeArticle($id: ID!) {
+  likeArticle(id: $id) {
+    success
+    message
+    like {
+      id
+      user {
+        id
+        username
+      }
+      article {
+        id
+        title
+        author {
+          id
+          username
+        }
+      }
+    }
+  }
+}
+
+mutation RemoveLike($id: ID!) {
+  removeLike(id: $id) {
+    success
+    message
+  }
+}

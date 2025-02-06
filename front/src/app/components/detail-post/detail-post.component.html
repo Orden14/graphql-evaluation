@@ -1,0 +1,42 @@
+<wcs-button size="s" mode="" [routerLink]="'/'">
+  Accueil
+</wcs-button>
+
+<div *ngIf="article">
+  <h1>{{ article.title }}</h1>
+  <p>{{ article.content }}</p>
+  <p><strong>Auteur :</strong> {{ article.author.username }}</p>
+  <p><strong>Likes :</strong> {{ article.likes?.length || 0 }}</p>
+  <wcs-button *ngIf="!isLiked"  (click)="like(article.id)" size="s"><wcs-mat-icon icon="thumb_up"></wcs-mat-icon> </wcs-button>
+  <wcs-button class="wcs-danger" *ngIf="!isLiked" (click)="removeLike(article.id)" size="s"><wcs-mat-icon icon="thumb_up"></wcs-mat-icon> </wcs-button>
+</div>
+
+<wcs-divider> </wcs-divider>
+
+<div>
+    <h3>Poster un commentaire</h3>
+    <wcs-form-field>
+        <wcs-textarea (input)="updateContent($event)" placeholder="Commentaire" rows="6" cols="80"></wcs-textarea>
+        <wcs-error>{{ this.errorMessage }}</wcs-error>
+    </wcs-form-field>
+    <div *ngIf="message" class="mt-3 text-center text-danger">
+      {{ message }}
+    </div>
+    <wcs-button class="wcs-primary" (click)="publishComment(article!.id)">
+        Envoyer
+    </wcs-button>
+</div>
+
+<wcs-divider> </wcs-divider>
+
+<div *ngIf="article">
+  <h3>Commentaires :</h3>
+  <ul>
+    <li *ngFor="let comment of article.comments">
+      <strong>{{ comment?.author?.username }} :</strong> {{ comment?.content }}
+    </li>
+  </ul>
+  <div *ngIf="article?.comments! == null">
+    <p>Aucun commentaire pour le moment.</p>
+  </div>
+</div>
