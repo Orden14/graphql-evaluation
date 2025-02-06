@@ -1,11 +1,9 @@
 <wcs-header>
   <h1 slot="title">GraphQL</h1>
   <div slot="actions">
-    <wcs-button size="s" mode="clear" class="">
-      <wcs-mat-icon icon="notifications"></wcs-mat-icon>
-    </wcs-button>
-    <wcs-button size="s" mode="clear" [routerLink]="'/register'">
+    <wcs-button *ngIf="!isUserLoggedIn()" size="s" mode="clear" [routerLink]="'/login'">
       <wcs-mat-icon icon="person_outline"></wcs-mat-icon>
     </wcs-button>
+    <wcs-button *ngIf="!!isUserLoggedIn()" (click)="logout()">Déconnexion</wcs-button>
   </div>
 </wcs-header>

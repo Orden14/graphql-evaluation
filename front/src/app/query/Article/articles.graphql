@@ -47,3 +47,42 @@ query GetArticle($id: ID!) {
     }
   }
 }
+
+mutation CreateArticle($title: String!, $content: String!) {
+  createArticle(title: $title, content: $content) {
+    success
+    message
+    article {
+      id
+      title
+      content
+      author {
+        id
+        username
+      }
+    }
+  }
+}
+
+mutation UpdateArticle($id: ID!, $title: String, $content: String) {
+  updateArticle(id: $id, title: $title, content: $content) {
+    success
+    message
+    article {
+      id
+      title
+      content
+      author {
+        id
+        username
+      }
+    }
+  }
+}
+
+mutation DeleteArticle($id: ID!) {
+  deleteArticle(id: $id) {
+    success
+    message
+  }
+}

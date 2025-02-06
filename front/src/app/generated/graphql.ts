@@ -169,6 +169,30 @@ export type GetArticleQueryVariables = Exact<{
 
 export type GetArticleQuery = { __typename?: 'Query', getArticle?: { __typename?: 'Article', id: string, title: string, content: string, author: { __typename?: 'User', id: string, username: string }, comments?: Array<{ __typename?: 'Comment', id: string, content: string, author: { __typename?: 'User', username: string } } | null> | null, likes?: Array<{ __typename?: 'Like', id: string, user: { __typename?: 'User', username: string } } | null> | null } | null };
 
+export type CreateArticleMutationVariables = Exact<{
+  title: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type CreateArticleMutation = { __typename?: 'Mutation', createArticle?: { __typename?: 'ArticleResponse', success: boolean, message: string, article?: { __typename?: 'Article', id: string, title: string, content: string, author: { __typename?: 'User', id: string, username: string } } | null } | null };
+
+export type UpdateArticleMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateArticleMutation = { __typename?: 'Mutation', updateArticle?: { __typename?: 'ArticleResponse', success: boolean, message: string, article?: { __typename?: 'Article', id: string, title: string, content: string, author: { __typename?: 'User', id: string, username: string } } | null } | null };
+
+export type DeleteArticleMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteArticleMutation = { __typename?: 'Mutation', deleteArticle?: { __typename?: 'ArticleResponse', success: boolean, message: string } | null };
+
 export type CommentArticleMutationVariables = Exact<{
   articleId: Scalars['ID']['input'];
   content: Scalars['String']['input'];
@@ -176,6 +200,20 @@ export type CommentArticleMutationVariables = Exact<{
 
 
 export type CommentArticleMutation = { __typename?: 'Mutation', commentArticle?: { __typename?: 'CommentResponse', success: boolean, message: string, comment?: { __typename?: 'Comment', id: string, content: string, author: { __typename?: 'User', id: string, username: string }, article: { __typename?: 'Article', id: string, title: string, author: { __typename?: 'User', id: string, username: string } } } | null } | null };
+
+export type LikeArticleMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type LikeArticleMutation = { __typename?: 'Mutation', likeArticle?: { __typename?: 'LikeResponse', success: boolean, message: string, like?: { __typename?: 'Like', id: string, user: { __typename?: 'User', id: string, username: string }, article: { __typename?: 'Article', id: string, title: string, author: { __typename?: 'User', id: string, username: string } } } | null } | null };
+
+export type RemoveLikeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type RemoveLikeMutation = { __typename?: 'Mutation', removeLike?: { __typename?: 'LikeResponse', success: boolean, message: string } | null };
 
 export type CreateUserMutationVariables = Exact<{
   username: Scalars['String']['input'];
@@ -267,6 +305,81 @@ export const GetArticleDocument = gql`
       super(apollo);
     }
   }
+export const CreateArticleDocument = gql`
+    mutation CreateArticle($title: String!, $content: String!) {
+  createArticle(title: $title, content: $content) {
+    success
+    message
+    article {
+      id
+      title
+      content
+      author {
+        id
+        username
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateArticleGQL extends Apollo.Mutation<CreateArticleMutation, CreateArticleMutationVariables> {
+    override document = CreateArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateArticleDocument = gql`
+    mutation UpdateArticle($id: ID!, $title: String, $content: String) {
+  updateArticle(id: $id, title: $title, content: $content) {
+    success
+    message
+    article {
+      id
+      title
+      content
+      author {
+        id
+        username
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateArticleGQL extends Apollo.Mutation<UpdateArticleMutation, UpdateArticleMutationVariables> {
+    override document = UpdateArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteArticleDocument = gql`
+    mutation DeleteArticle($id: ID!) {
+  deleteArticle(id: $id) {
+    success
+    message
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteArticleGQL extends Apollo.Mutation<DeleteArticleMutation, DeleteArticleMutationVariables> {
+    override document = DeleteArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const CommentArticleDocument = gql`
     mutation CommentArticle($articleId: ID!, $content: String!) {
   commentArticle(articleId: $articleId, content: $content) {
@@ -297,6 +410,59 @@ export const CommentArticleDocument = gql`
   })
   export class CommentArticleGQL extends Apollo.Mutation<CommentArticleMutation, CommentArticleMutationVariables> {
     override document = CommentArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LikeArticleDocument = gql`
+    mutation LikeArticle($id: ID!) {
+  likeArticle(id: $id) {
+    success
+    message
+    like {
+      id
+      user {
+        id
+        username
+      }
+      article {
+        id
+        title
+        author {
+          id
+          username
+        }
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LikeArticleGQL extends Apollo.Mutation<LikeArticleMutation, LikeArticleMutationVariables> {
+    override document = LikeArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const RemoveLikeDocument = gql`
+    mutation RemoveLike($id: ID!) {
+  removeLike(id: $id) {
+    success
+    message
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class RemoveLikeGQL extends Apollo.Mutation<RemoveLikeMutation, RemoveLikeMutationVariables> {
+    override document = RemoveLikeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

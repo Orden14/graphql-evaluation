@@ -11,6 +11,11 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { GraphQLModule } from '../graphql/graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DetailPostComponent } from './components/detail-post/detail-post.component';
+import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { ArticleFormComponent } from './components/article-form/article-form.component';
+import { ArticleEditFormComponent } from './components/article-edit-form/article-edit-form.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +24,9 @@ import { DetailPostComponent } from './components/detail-post/detail-post.compon
     RegisterPageComponent,
     HeadersComponent,
     LoginPageComponent,
-    DetailPostComponent
+    DetailPostComponent,
+    ArticleFormComponent,
+    ArticleEditFormComponent
   ],
   imports: [
     BrowserModule,
@@ -28,6 +35,9 @@ import { DetailPostComponent } from './components/detail-post/detail-post.compon
     NgbModule,
     GraphQLModule,
     HttpClientModule,
+    FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

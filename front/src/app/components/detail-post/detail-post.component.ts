@@ -1,6 +1,7 @@
+import { LocationStrategy } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommentArticleGQL, GetArticleGQL, GetArticleQuery } from 'src/app/generated/graphql';
+import { CommentArticleGQL, GetArticleGQL, GetArticleQuery, LikeArticleGQL, RemoveLikeGQL } from 'src/app/generated/graphql';
 
 @Component({
   selector: 'app-detail-post',
@@ -11,11 +12,15 @@ export class DetailPostComponent implements OnInit {
   article: GetArticleQuery['getArticle'] | null = null;
   content: string = '';
   errorMessage: string = '';
+  message : string = ''; 
+  isLiked : boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private getArticleGQL: GetArticleGQL,
     private commentArticleGQL : CommentArticleGQL,
+    private removeLikeGQL : RemoveLikeGQL,
+    private likeArticleGQL : LikeArticleGQL,
   ) {}
 
   ngOnInit(): void {
@@ -34,10 +39,13 @@ export class DetailPostComponent implements OnInit {
     }
     
     this.commentArticleGQL.mutate({ articleId: id, content: this.content }).subscribe(({ data }) => {
-        if (data?.commentArticle?.success) {
-          console.log('Commentaire ajouté avec succès :', data.commentArticle.comment);
+      if (data?.commentArticle?.success) {
+          this.message = "Commentaire ajouté avec succès"
           this.content = ''; 
           this.errorMessage = '';
+          setTimeout(()=>{
+            window.location.reload();
+          }, 200);
         } else {
           this.errorMessage = "Erreur : " + (data?.commentArticle?.message || "Impossible d'ajouter le commentaire");
         }
@@ -50,6 +58,32 @@ export class DetailPostComponent implements OnInit {
   updateContent(event: Event): void {
     const target = event.target as HTMLTextAreaElement;
     this.content = target.value;
+  }
+
+  like(id : string) : void {
+    this.likeArticleGQL.mutate({ id: id }).subscribe(({ data }) => {
+      if(data?.likeArticle?.success){
+        this.isLiked = true;
+        setTimeout(()=>{
+          window.location.reload();
+        }, 200);
+      } else {
+        this.errorMessage = "Erreur : " + (data?.likeArticle?.message || "Impossible de liker l'article");
+      }
+    });
+  }
+
+  removeLike (id : string) : void {
+    this.removeLikeGQL.mutate({ id: id }).subscribe(({ data }) => {
+      if(data?.removeLike?.success){
+        this.isLiked = false;
+        setTimeout(()=>{
+          window.location.reload();
+        }, 200);
+      } else {
+        this.errorMessage = "Erreur : " + (data?.removeLike?.message || "Impossible de retirer le like de l'article");
+      }
+    });
   }
 
 }

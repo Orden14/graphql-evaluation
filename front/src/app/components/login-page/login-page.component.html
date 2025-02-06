@@ -11,32 +11,33 @@
                   </div>
                 </div>
               </div>
-              <form action="#!">
+              <form (submit)="login(); $event.preventDefault()">
                 <div class="row gy-3 overflow-hidden">
                   <div class="col-12">
                     <div class="form-floating mb-3">
                       <input
-                        type="email"
-                        class="form-control"
-                        name="email"
-                        id="email"
-                        placeholder="name@example.com"
-                        required
-                      />
-                      <label for="email" class="form-label">Email</label>
+                      type="text"
+                      class="form-control"
+                      name="username"
+                      id="username"
+                      placeholder="Pseudo"
+                      required
+                      [(ngModel)]="username"
+                    />
+                      <label for="email" class="form-label">Pseudonyme</label>
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-floating mb-3">
                       <input
-                        type="password"
-                        class="form-control"
-                        name="password"
-                        id="password"
-                        value=""
-                        placeholder="Password"
-                        required
-                      />
+                      type="password"
+                      class="form-control"
+                      name="password"
+                      id="password"
+                      placeholder="Mot de passe"
+                      required
+                      [(ngModel)]="password"
+                    />
                       <label for="password" class="form-label">Mot de passe</label>
                     </div>
                   </div>
@@ -49,6 +50,11 @@
                   </div>
                 </div>
               </form>
+
+              <div *ngIf="message" class="mt-3 text-center text-danger">
+                {{ message }}
+              </div>
+
               <div class="row">
                 <div class="col-12">
                   <hr class="mt-5 mb-4 border-secondary-subtle" />

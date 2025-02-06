@@ -1,6 +1,5 @@
 .post-container {
     height: 100%;
-    overflow: hidden;
     background-color: #f9fafb;
 
     .add-post {
@@ -12,6 +11,11 @@
     .post-card {
         margin: 16px;
         padding: 16px;
+    }
+
+    .button-container {
+        display: flex;
+         justify-content: space-around;
     }
 
 }

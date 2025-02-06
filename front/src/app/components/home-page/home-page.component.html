@@ -1,6 +1,20 @@
 <app-headers></app-headers>
+
 <div class="post-container">
-  <div class="add-post">
+  <wcs-input
+    type="text"
+    placeholder="Rechercher par titre"
+    [(ngModel)]="searchTerm"
+    (wcsInput)="filterArticles()"
+  />
+
+  <wcs-select [(ngModel)]="sortOrder" (wcsChange)="sortArticles()">
+    <wcs-select-option value="none">Par défaut</wcs-select-option>
+    <wcs-select-option value="asc">Likes croissants</wcs-select-option>
+    <wcs-select-option value="desc">Likes décroissants</wcs-select-option>
+  </wcs-select>
+
+  <div *ngIf="!!isUserLoggedIn()" class="add-post" [routerLink]="'createPost'">
     <wcs-button class="wcs-light" id="tooltiped-button-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -19,26 +33,18 @@
     </wcs-tooltip>
   </div>
 
-  <div *ngFor="let article of articles">
-    <wcs-card (click)="viewDetails(article!.id)" class="post-card" mode="raised">
-      <wcs-card-body>
+  <div *ngFor="let article of filteredArticles">
+    <wcs-card class="post-card" mode="raised">
+      <wcs-card-body (click)="viewDetails(article!.id)">
         <h2>{{ article?.title }}</h2>
         <p>{{ article?.content }}</p>
         <p><strong>Auteur :</strong> {{ article?.author!.username }}</p>
-        <p><strong>Likes :</strong> {{ article?.likes?.length || 0 }}</p>        
-        <div *ngIf="article!.comments! != null">
-          <h3>Commentaires :</h3>
-          <ul>
-            <li *ngFor="let comment of article?.comments">
-              <strong>{{ comment?.author?.username }} :</strong> {{ comment?.content }}
-            </li>
-          </ul>
-        </div>
-        <div *ngIf="article?.comments! == null">
-          <p>Aucun commentaire pour le moment.</p>
-        </div>
+        <p><strong>Likes :</strong> {{ article?.likes?.length || 0 }}</p>
       </wcs-card-body>
     </wcs-card>
+    <div class ="button-container">
+      <wcs-button *ngIf="article?.author?.username == getUserName()" (click)="deletePost(article!.id)" class="wcs-danger">Supprimer le post</wcs-button>
+      <wcs-button *ngIf="article?.author?.username == getUserName()" (click)="editArticle(article!.id)" class="wcs-warning">Editer le post</wcs-button>
+    </div>
   </div>
-  
 </div>

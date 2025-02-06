@@ -1,24 +1,37 @@
-import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
-import { HttpLink } from 'apollo-angular/http';
 import { NgModule } from '@angular/core';
-import { ApolloClientOptions, InMemoryCache } from '@apollo/client/core';
-import { Environment} from '../environment/environment'
-
-export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
-  return {
-    link: httpLink.create({uri : Environment.apiUrl}),
-    cache: new InMemoryCache(),
-  };
-}
+import { HttpLink } from 'apollo-angular/http';
+import { Apollo, ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
+import { InMemoryCache } from '@apollo/client/core';
+import { ApolloLink } from '@apollo/client/link/core';
+import { setContext } from '@apollo/client/link/context';
 
 @NgModule({
-  exports: [ApolloModule],
+  imports: [ApolloModule],
   providers: [
     {
       provide: APOLLO_OPTIONS,
-      useFactory: createApollo,
-      deps: [HttpLink],
-    },
-  ],
+      useFactory: (httpLink: HttpLink) => {
+        const http = httpLink.create({ uri: 'http://localhost:4000' });
+        const auth = setContext((operation, context) => {
+          const token = sessionStorage.getItem('JwT');
+          if (token) {
+            return {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            };
+          } else {
+            return {};
+          }
+        });
+
+        return {
+          link: ApolloLink.from([auth, http]),
+          cache: new InMemoryCache()
+        };
+      },
+      deps: [HttpLink]
+    }
+  ]
 })
-export class GraphQLModule {}
+export class GraphQLModule { }

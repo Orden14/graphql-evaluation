@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CreateUserGQL } from 'src/app/generated/graphql';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-page',
@@ -12,25 +13,29 @@ export class RegisterPageComponent {
   password: string = '';
   message: string = '';
 
-  constructor(private createUserGQL: CreateUserGQL) {}
+  constructor(
+    private createUserGQL: CreateUserGQL,
+    private router: Router,
+  ) {}
 
   register(): void {
     if (!this.username.trim() || !this.password.trim()) {
       this.message = 'Veuillez remplir tous les champs requis.';
       return;
     }
-
+  
     this.createUserGQL
       .mutate({ username: this.username, password: this.password })
       .subscribe({
         next: ({ data }) => {
           if (data?.createUser!.success) {
-            this.message =
-              'Inscription réussie ! Vous pouvez maintenant vous connecter.';
+            this.message = 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
             this.resetForm();
+            setTimeout(() => {
+              this.router.navigate(['/login']);
+            }, 1000);
           } else {
-            this.message =
-              data?.createUser!.message || "Erreur lors de l'inscription.";
+            this.message = data?.createUser!.message || "Erreur lors de l'inscription.";
           }
         },
         error: (error) => {
@@ -39,6 +44,7 @@ export class RegisterPageComponent {
         },
       });
   }
+  
 
   private resetForm(): void {
     this.username = '';
