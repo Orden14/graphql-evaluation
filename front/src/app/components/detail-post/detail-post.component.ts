@@ -1,7 +1,12 @@
-import { LocationStrategy } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { CommentArticleGQL, GetArticleGQL, GetArticleQuery, LikeArticleGQL, RemoveLikeGQL } from 'src/app/generated/graphql';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {
+  CommentArticleGQL,
+  GetArticleGQL,
+  GetArticleQuery,
+  LikeArticleGQL,
+  RemoveLikeGQL
+} from 'src/app/generated/graphql';
 
 @Component({
   selector: 'app-detail-post',
@@ -12,8 +17,9 @@ export class DetailPostComponent implements OnInit {
   article: GetArticleQuery['getArticle'] | null = null;
   content: string = '';
   errorMessage: string = '';
-  message : string = ''; 
+  message : string = '';
   isLiked : boolean = false;
+  numberOfLikes : number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +34,8 @@ export class DetailPostComponent implements OnInit {
     if (articleId) {
       this.getArticleGQL.fetch({ id: articleId }).subscribe(({ data }) => {
         this.article = data.getArticle;
+        this.numberOfLikes = this.article?.likes?.length ?? 0;
+        this.isLiked = this.article?.likes?.some(like => like?.user?.username === sessionStorage.getItem('username')) ?? false;
       });
     }
   }
@@ -37,11 +45,11 @@ export class DetailPostComponent implements OnInit {
       this.errorMessage = "Veuillez écrire quelque chose";
       return;
     }
-    
+
     this.commentArticleGQL.mutate({ articleId: id, content: this.content }).subscribe(({ data }) => {
       if (data?.commentArticle?.success) {
           this.message = "Commentaire ajouté avec succès"
-          this.content = ''; 
+          this.content = '';
           this.errorMessage = '';
           setTimeout(()=>{
             window.location.reload();
@@ -64,9 +72,7 @@ export class DetailPostComponent implements OnInit {
     this.likeArticleGQL.mutate({ id: id }).subscribe(({ data }) => {
       if(data?.likeArticle?.success){
         this.isLiked = true;
-        setTimeout(()=>{
-          window.location.reload();
-        }, 200);
+        this.numberOfLikes++
       } else {
         this.errorMessage = "Erreur : " + (data?.likeArticle?.message || "Impossible de liker l'article");
       }
@@ -77,9 +83,7 @@ export class DetailPostComponent implements OnInit {
     this.removeLikeGQL.mutate({ id: id }).subscribe(({ data }) => {
       if(data?.removeLike?.success){
         this.isLiked = false;
-        setTimeout(()=>{
-          window.location.reload();
-        }, 200);
+        this.numberOfLikes--
       } else {
         this.errorMessage = "Erreur : " + (data?.removeLike?.message || "Impossible de retirer le like de l'article");
       }

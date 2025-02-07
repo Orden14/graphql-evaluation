@@ -6,9 +6,9 @@
   <h1>{{ article.title }}</h1>
   <p>{{ article.content }}</p>
   <p><strong>Auteur :</strong> {{ article.author.username }}</p>
-  <p><strong>Likes :</strong> {{ article.likes?.length || 0 }}</p>
+  <p><strong>Likes :</strong> {{ numberOfLikes }}</p>
   <wcs-button *ngIf="!isLiked"  (click)="like(article.id)" size="s"><wcs-mat-icon icon="thumb_up"></wcs-mat-icon> </wcs-button>
-  <wcs-button class="wcs-danger" *ngIf="!isLiked" (click)="removeLike(article.id)" size="s"><wcs-mat-icon icon="thumb_up"></wcs-mat-icon> </wcs-button>
+  <wcs-button class="wcs-danger" *ngIf="!!isLiked" (click)="removeLike(article.id)" size="s"><wcs-mat-icon icon="thumb_up"></wcs-mat-icon> </wcs-button>
 </div>
 
 <wcs-divider> </wcs-divider>
