@@ -50,10 +50,10 @@ export const removeLike: MutationResolvers['removeLike'] = async (_, {id}, {data
     }
 
     try {
-
-        const like = await dataSources.db.like.findUnique({
+        const like = await dataSources.db.like.findFirst({
             where: {
-                id
+                articleId: id,
+                userId: user.id
             },
             include: {
                 article: {
@@ -73,9 +73,10 @@ export const removeLike: MutationResolvers['removeLike'] = async (_, {id}, {data
             return getArticleLikeFailureResponse('Authenticated user is not the owner of this like');
         }
 
-        await dataSources.db.like.delete({
+        await dataSources.db.like.deleteMany({
             where: {
-                id
+                articleId: id,
+                userId: user.id
             }
         });
 
